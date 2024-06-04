@@ -34,8 +34,10 @@ function sortfuction(criteria) {
             filteredStudents.sort((a, b) => a.class - b.class);
             break;
         case 'gender':
-            const males =filteredStudents.sort((a,b)=> (a.gender + ' ' + a.gender).localeCompare(b.gender + ' ' + b.gender));
+            const males = filteredStudents.filter(student => student.gender === 'Male');
+            const females = filteredStudents.filter(student => student.gender === 'Female');
             renderTable(males);
+            renderTable(females, true);
             return;
     }
     renderTable(filteredStudents);
@@ -86,6 +88,43 @@ function renderTable(data) {
     tableContainer.innerHTML = tableHTML;
 }
 
+function renderTable(data, append = false) {
+    const tableContainer = document.getElementById('table-container');
+    let tableHTML = `
+    <table>
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Name</td>
+                <td>Gender</td>
+                <td>Class</td>
+                <td>Marks</td>
+                <td>Passing</td>
+                <td>Email</td>
+            </tr>
+        </thead>
+        <tbody>
+            ${data.map(student => `
+                <tr>
+                    <td>${student.id}</td>
+                    <td><img src="${student.img_src}" alt="Avatar">${student.first_name} ${student.last_name}</td>
+                    
+                    <td>${student.gender}</td>
+                    <td>${student.class}</td>
+                    <td>${student.marks}</td>
+                    <td>${student.passing ? 'Passing' : 'Failed'}</td>
+                    <td>${student.email}</td>
+                </tr>
+            `).join('')}
+        </tbody>
+    </table>
+    `;
+    if (append) {
+        tableContainer.innerHTML += tableHTML;
+    } else {
+        tableContainer.innerHTML = tableHTML;
+    }
+}
 
 
 
